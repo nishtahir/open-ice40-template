@@ -4,7 +4,10 @@ RTL = ../rtl
 YOSYS ?= yosys
 YOSYS_FLAGS ?= -q
 
-NEXT_PNR ?= nextpnr-ice40
+PNR ?= nextpnr-ice40
+PNR_FLAGS ?= ""
+PROGRAM ?= iceprog
+PROGRAM_FLAGS ?= ""
 
 PCF = $(BUILD)/constraints.pcf
 NET = $(BUILD)/out.json
@@ -30,7 +33,7 @@ clean:
 
 .PHONY: program
 program: $(BIN)
-	icesprog $(BIN)
+	$(PROGRAM) $(PROGRAM_FLAGS) $(BIN)
 
 $(PCF): 
 	cat $(BOARD)/*.pcf > $(BUILD)/constraints.pcf
@@ -39,7 +42,7 @@ $(NET): $(SV)
 	$(YOSYS) $(YOSYS_FLAGS) -p 'synth_ice40 -top $(TOP) -json $(NET)' $(RTL)/*.sv
 
 $(ASC): $(NET) $(PCF)
-	$(NEXT_PNR) $(NEXT_PNR_FLAGS) --json $(NET)  --pcf $(PCF)  --asc $(ASC)
+	$(PNR) $(PNR_FLAGS) --json $(NET)  --pcf $(PCF)  --asc $(ASC)
 
 $(BIN): $(ASC)
 	icepack $(ASC) $(BIN)
