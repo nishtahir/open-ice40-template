@@ -1,0 +1,6 @@
+{
+    "verilog.linting.iverilog.arguments": "-g 2012 -Y .sv -y source/ ",
+    "verilog.linting.linter": "iverilog",
+    "verilog.logging.enabled": true,
+    "svg.preview.background": "white"
+}
